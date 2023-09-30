@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler"
+
+import { useEffect, useState } from "react"
+import { NavigationContainer } from "@react-navigation/native"
+import AuthProvider from "./src/contexts/auth"
+import Routes from "./src/routes"
+import * as Location from "expo-location"
+import { Text } from "react-native"
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+	const [permission, setPermission] = useState(
+		Location.getForegroundPermissionsAsync() === "granted" ? true : false
+	)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+	useEffect(() => {
+		;(async () => {
+			let { status } = await Location.requestForegroundPermissionsAsync()
+			if (status !== "granted") {
+				console.log("Permissão para acessar a localização foi negada")
+				return
+			}
+
+			setPermission(true)
+		})()
+	}, [])
+
+	return (
+		<>
+			{permission ? (
+				<NavigationContainer>
+					<AuthProvider>
+						<Routes />
+					</AuthProvider>
+				</NavigationContainer>
+			) : (
+				<Text
+					style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+				>
+					Permissão negada
+				</Text>
+			)}
+		</>
+	)
+}
