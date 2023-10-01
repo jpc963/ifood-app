@@ -3,9 +3,34 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 
 import Home from "../pages/Home"
 import CustomDrawer from "../components/CustomDrawer"
+import Rodometro from "../pages/Rodometro"
+import Corridas from "../pages/Corridas"
+import Faturas from "../pages/Faturas"
+import Estatisticas from "../pages/Estatisticas"
+import Premium from "../pages/Premium"
+import Configuracoes from "../pages/Configuracoes"
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
+
+const routes = {
+	names: [
+		"Rodômetro",
+		"Corridas",
+		"Faturas",
+		"Estatísticas",
+		"Premium",
+		"Configurações",
+	],
+	components: [
+		Rodometro,
+		Corridas,
+		Faturas,
+		Estatisticas,
+		Premium,
+		Configuracoes,
+	],
+}
 
 function MyDrawer() {
 	return (
@@ -34,6 +59,14 @@ function AppRoutes() {
 				name="MyDrawer"
 				component={MyDrawer}
 			/>
+
+			{routes.names.map((name, index) => (
+				<Stack.Screen
+					key={index}
+					name={name}
+					component={routes.components[index]}
+				/>
+			))}
 		</Stack.Navigator>
 	)
 }

@@ -7,26 +7,24 @@ import { UserLocationButton, UserLocationIcon } from "./styles"
 export default function Mapa() {
 	const [region, setRegion] = useState(null)
 
-	const loadLocation = async () => {
-		await Location.getCurrentPositionAsync({
-			accuracy: Location.Accuracy.High,
-		})
-			.then((res) => {
-				setRegion({
-					latitude: res.coords.latitude,
-					longitude: res.coords.longitude,
-					latitudeDelta: 0.0143,
-					longitudeDelta: 0.0134,
-				})
-			})
-			.catch((error) => {
-				console.log(error)
-			})
-
-		return
-	}
-
 	useEffect(() => {
+		const loadLocation = async () => {
+			await Location.getCurrentPositionAsync({
+				accuracy: Location.Accuracy.High,
+			})
+				.then((res) => {
+					setRegion({
+						latitude: res.coords.latitude,
+						longitude: res.coords.longitude,
+						latitudeDelta: 0.0143,
+						longitudeDelta: 0.0134,
+					})
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+
 		loadLocation()
 	}, [])
 

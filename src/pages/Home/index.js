@@ -1,11 +1,12 @@
 import Mapa from "../../components/Mapa"
 
-import { Container, Icon, IconsArea, IconButton } from "./styles"
+import { Container, Icon, IconsArea, IconButton, MapArea } from "./styles"
 
 function Home({ navigation }) {
 	return (
 		<Container>
 			<Mapa />
+			{/* <MapArea /> */}
 
 			<IconsArea>
 				<IconButton onPress={() => navigation.openDrawer()}>

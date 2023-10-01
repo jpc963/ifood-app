@@ -12,11 +12,21 @@ export const HeaderArea = styled.View`
 	margin-top: 27px;
 `
 
+export const UploadButton = styled.TouchableOpacity`
+	background-color: #fff;
+	width: 110px;
+	height: 110px;
+	border-radius: 55px;
+	align-items: center;
+	justify-content: center;
+`
+
 export const Logo = styled.Image.attrs({
 	resizeMode: "contain",
 })`
 	width: 110px;
 	height: 110px;
+	border-radius: 55px;
 `
 
 export const HeaderText = styled.Text`
@@ -30,19 +40,23 @@ export const HeaderText = styled.Text`
 	padding-bottom: 4px;
 `
 
-export const Button = styled.TouchableOpacity.attrs()`
+export const Button = styled.TouchableOpacity`
 	width: 200px;
 	height: 40px;
-	background-color: ${({ props }) => (props?.bg ? props.bg : "#fff")};
+	background-color: ${(props) => (props?.bg ? props.bg : "#fff")};
 	border-radius: 5px;
 	margin-top: 15px;
 	align-items: center;
 	justify-content: center;
 `
 
-export const ButtonText = styled.Text.attrs()`
+export const ButtonText = styled.Text`
 	text-align: center;
 	font-size: 17px;
 	font-weight: 400;
-	color: ${({ props }) => (props?.color ? props.color : "#2b2d42")};
+	color: ${(props) => (props?.color ? props.color : "#2b2d42")};
+`
+
+export const Text = styled.Text`
+	margin-top: 11px;
 `
