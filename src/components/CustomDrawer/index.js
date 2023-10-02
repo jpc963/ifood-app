@@ -77,7 +77,7 @@ export default function CustomDrawer({ navigation }) {
 					)}
 				</HeaderArea>
 
-				<HeaderText>Olá, {user.email}</HeaderText>
+				<HeaderText>Olá, {user.nome}</HeaderText>
 
 				{routes.usuario.map((button, index) => (
 					<Button

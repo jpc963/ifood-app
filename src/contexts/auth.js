@@ -5,7 +5,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 } from "firebase/auth"
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc, getDoc } from "firebase/firestore"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const AuthContext = createContext()
@@ -49,9 +49,26 @@ function AuthProvider({ children }) {
 	const login = async (email, password) => {
 		try {
 			await signInWithEmailAndPassword(auth, email, password).then(
-				(userCredential) => {
-					setUser(userCredential.user)
-					AsyncStorage.setItem("user", JSON.stringify(userCredential.user))
+				async (userCredential) => {
+					await getDoc(doc(db, "users", userCredential.user.uid)).then(
+						(snapshot) => {
+							setUser({
+								uid: userCredential.user.uid,
+								nome: snapshot.data().nome,
+								usuario: snapshot.data().usuario,
+								email: snapshot.data().email,
+							})
+							AsyncStorage.setItem(
+								"user",
+								JSON.stringify({
+									uid: userCredential.user.uid,
+									nome: snapshot.data().nome,
+									usuario: snapshot.data().usuario,
+									email: snapshot.data().email,
+								})
+							)
+						}
+					)
 				}
 			)
 		} catch (error) {
