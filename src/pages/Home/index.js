@@ -13,7 +13,7 @@ function Home({ navigation }) {
 					<Icon source={require("../../assets/images/menu-icon.png")} />
 				</IconButton>
 
-				<IconButton>
+				<IconButton onPress={() => navigation.navigate("Add")}>
 					<Icon source={require("../../assets/images/add.png")} />
 				</IconButton>
 

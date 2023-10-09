@@ -4,12 +4,12 @@ import { getFirestore } from "firebase/firestore"
 import { getStorage } from "firebase/storage"
 
 const firebaseConfig = {
-	apiKey: "AIzaSyDxOIvcJzslu4vT74UsyHIbV7T_iqFuC_M",
-	authDomain: "ifoodstats.firebaseapp.com",
-	projectId: "ifoodstats",
-	storageBucket: "ifoodstats.appspot.com",
-	messagingSenderId: "41082001242",
-	appId: "1:41082001242:web:decfa63903d9d4b7860563",
+	apiKey: process.env.EXPO_PUBLIC_API_KEY,
+	authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+	projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+	storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+	messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+	appId: process.env.EXPO_PUBLIC_APP_ID,
 }
 
 const app = initializeApp(firebaseConfig)

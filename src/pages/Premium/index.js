@@ -1,11 +1,21 @@
 import { Text } from "react-native"
 import React from "react"
-import { Container } from "./styles"
+import { Container, Button, Footer, HeaderText } from "./styles"
 
-export default function Premium() {
+export default function Premium({ navigation }) {
 	return (
 		<Container>
 			<Text>Premium</Text>
+
+			<Footer>
+				<Button onPress={() => navigation.goBack()}>
+					<HeaderText>Voltar</HeaderText>
+				</Button>
+
+				<Button onPress={() => navigation.navigate("Add")}>
+					<HeaderText>Nova corrida</HeaderText>
+				</Button>
+			</Footer>
 		</Container>
 	)
 }

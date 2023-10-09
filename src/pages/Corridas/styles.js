@@ -35,7 +35,7 @@ export const List = styled.FlatList`
 	width: 100%;
 `
 
-export const ItemArea = styled.View`
+export const ItemArea = styled.TouchableOpacity`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
@@ -62,7 +62,9 @@ export const Text = styled.Text`
 `
 
 export const Footer = styled.View`
-	justify-content: center;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 	background-color: #2b2d42;
 	width: 100%;
 	height: 60px;

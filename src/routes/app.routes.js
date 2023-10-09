@@ -9,6 +9,7 @@ import Faturas from "../pages/Faturas"
 import Estatisticas from "../pages/Estatisticas"
 import Premium from "../pages/Premium"
 import Configuracoes from "../pages/Configuracoes"
+import Add from "../pages/Add"
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -21,6 +22,7 @@ const routes = {
 		"Estatísticas",
 		"Premium",
 		"Configurações",
+		"Add",
 	],
 	components: [
 		Rodometro,
@@ -29,6 +31,7 @@ const routes = {
 		Estatisticas,
 		Premium,
 		Configuracoes,
+		Add,
 	],
 }
 
