@@ -1,5 +1,8 @@
 import { createContext, useState, useEffect } from "react"
 import { db, auth } from "../../firebaseConfig"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { format, subDays } from "date-fns"
+
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
@@ -16,8 +19,6 @@ import {
 	orderBy,
 	where,
 } from "firebase/firestore"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { format, subDays, subMonths } from "date-fns"
 
 export const AuthContext = createContext()
 
@@ -56,6 +57,8 @@ function AuthProvider({ children }) {
 			console.log("[REGISTER]", error)
 		}
 	}
+
+	//TODO: Google Sign In
 
 	const login = async (email, password) => {
 		try {
@@ -98,6 +101,20 @@ function AuthProvider({ children }) {
 		}
 	}
 
+	const addDespesa = async (valor, descricao, categoria, diaDeHoje) => {
+		try {
+			await addDoc(collection(doc(db, "users", user.uid), "corridas"), {
+				valor: valor,
+				descricao: descricao,
+				categoria: categoria,
+				createdAt: diaDeHoje,
+				tipo: "despesa",
+			})
+		} catch (error) {
+			console.log("[ADD_DESPESA]", error)
+		}
+	}
+
 	const addCorrida = async (valor, distancia, duracao, diaDeHoje) => {
 		try {
 			await addDoc(collection(doc(db, "users", user.uid), "corridas"), {
@@ -105,6 +122,7 @@ function AuthProvider({ children }) {
 				distancia: distancia,
 				duracao: duracao,
 				createdAt: diaDeHoje,
+				tipo: "receita",
 			})
 		} catch (error) {
 			console.log("[ADD_CORRIDA]", error)
@@ -127,15 +145,45 @@ function AuthProvider({ children }) {
 		}
 	}
 
-	const getCorridasHoje = async () => {
+	const updateDespesa = async (id, valor, descricao, categoria) => {
 		try {
-			let corridas = await getDocs(
-				query(
-					collection(doc(db, "users", user.uid), "corridas"),
-					orderBy("createdAt", "desc"),
-					where("createdAt", ">=", format(new Date(), "dd/MM/yyyy"))
-				)
+			await setDoc(
+				doc(doc(db, "users", user.uid), "corridas", id),
+				{
+					valor: valor,
+					descricao: descricao,
+					categoria: categoria,
+				},
+				{ merge: true }
 			)
+		} catch (error) {
+			console.log("[UPDATE_CORRIDA]", error)
+		}
+	}
+
+	const getLancamentos = async (dias) => {
+		let diasMostrados =
+			dias === 7
+				? format(subDays(new Date(), dias), "dd/MM/yyyy")
+				: dias === 1
+				? format(new Date(), "dd/MM/yyyy")
+				: null
+
+		try {
+			let corridas = dias
+				? await getDocs(
+						query(
+							collection(doc(db, "users", user.uid), "corridas"),
+							orderBy("createdAt", "desc"),
+							where("createdAt", ">=", diasMostrados)
+						)
+				  )
+				: await getDocs(
+						query(
+							collection(doc(db, "users", user.uid), "corridas"),
+							orderBy("createdAt", "desc")
+						)
+				  )
 
 			corridas = corridas.docs.map((doc) => {
 				return {
@@ -151,54 +199,6 @@ function AuthProvider({ children }) {
 		}
 	}
 
-	const getCorridas7Dias = async () => {
-		try {
-			let sevenDaysAgo = format(subDays(new Date(), 7), "dd/MM/yyyy")
-			let corridas = await getDocs(
-				query(
-					collection(doc(db, "users", user.uid), "corridas"),
-					orderBy("createdAt", "desc"),
-					where("createdAt", ">=", sevenDaysAgo)
-				)
-			)
-
-			corridas = corridas.docs.map((doc) => {
-				return {
-					...doc.data(),
-					id: doc.id,
-					createdAt: doc.data().createdAt.slice(0, 10),
-				}
-			})
-
-			return corridas
-		} catch (error) {
-			console.log("[GET_CORRIDAS_7_DIAS]", error)
-		}
-	}
-
-	const getCorridasTotais = async () => {
-		try {
-			let corridas = await getDocs(
-				query(
-					collection(doc(db, "users", user.uid), "corridas"),
-					orderBy("createdAt", "desc")
-				)
-			)
-
-			corridas = corridas.docs.map((doc) => {
-				return {
-					...doc.data(),
-					id: doc.id,
-					createdAt: doc.data().createdAt.slice(0, 10),
-				}
-			})
-
-			return corridas
-		} catch (error) {
-			console.log("[GET_CORRIDAS_TOTAIS]", error)
-		}
-	}
-
 	return (
 		<AuthContext.Provider
 			value={{
@@ -206,11 +206,11 @@ function AuthProvider({ children }) {
 				login,
 				register,
 				logout,
+				addDespesa,
 				addCorrida,
 				updateCorrida,
-				getCorridasHoje,
-				getCorridas7Dias,
-				getCorridasTotais,
+				updateDespesa,
+				getLancamentos,
 			}}
 		>
 			{children}

@@ -2,7 +2,7 @@ import styled from "styled-components/native"
 
 export const UserLocationButton = styled.TouchableOpacity`
 	position: absolute;
-	bottom: 70px;
+	bottom: 80px;
 	right: 14px;
 `
 

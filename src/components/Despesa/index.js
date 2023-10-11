@@ -1,4 +1,7 @@
 import { useContext, useState } from "react"
+import { AuthContext } from "../../contexts/auth"
+import { format } from "date-fns"
+
 import {
 	Container,
 	LabelInput,
@@ -8,35 +11,36 @@ import {
 	ButtonText,
 	ButtonArea,
 } from "./styles"
-import { AuthContext } from "../../contexts/auth"
-import { format } from "date-fns"
+import { Icon } from "../MoneyIcon"
 
-export default function Add({ navigation, route }) {
+export default function Despesa({ navigation, route }) {
 	const [form, setForm] = useState(route.params || {})
-	const [editCorrida, setEditCorrida] = useState(!!route.params)
-	const { addCorrida, updateCorrida } = useContext(AuthContext)
+	const [editDespesa, setEditDespesa] = useState(!!route.params)
+	const { addDespesa, updateDespesa } = useContext(AuthContext)
 
 	const onClick = async () => {
-		if (!form.valor || !form.distancia || !form.duracao) {
+		if (!form.valor || !form.descricao || !form.categoria) {
 			alert("Preencha todos os campos")
 			return
 		}
 
-		if (editCorrida) {
-			await updateCorrida(form.id, form.valor, form.distancia, form.duracao)
+		if (editDespesa) {
+			await updateDespesa(form.id, form.valor, form.descricao, form.categoria)
 			setForm({})
 			navigation.goBack()
 			return
 		}
 
 		const diaDeHoje = format(new Date(), "dd/MM/yyyy - HH:mm:ss")
-		await addCorrida(form.valor, form.distancia, form.duracao, diaDeHoje)
+		await addDespesa(form.valor, form.descricao, form.categoria, diaDeHoje)
 		setForm({})
-		navigation.navigate("Corridas")
+		navigation.navigate("Home")
 	}
 
 	return (
 		<Container>
+			<Icon despesa />
+
 			<InputsArea>
 				<LabelInput>Valor</LabelInput>
 				<Input
@@ -45,18 +49,18 @@ export default function Add({ navigation, route }) {
 					value={form.valor}
 				/>
 
-				<LabelInput>Distância</LabelInput>
+				<LabelInput>Descrição</LabelInput>
 				<Input
-					placeholder="15 Km"
-					onChangeText={(text) => setForm({ ...form, distancia: text })}
-					value={form.distancia}
+					placeholder="Troca de óleo, pneu..."
+					onChangeText={(text) => setForm({ ...form, descricao: text })}
+					value={form.descricao}
 				/>
 
-				<LabelInput>Duração</LabelInput>
+				<LabelInput>Categoria</LabelInput>
 				<Input
-					placeholder="30 min"
-					onChangeText={(text) => setForm({ ...form, duracao: text })}
-					value={form.duracao}
+					placeholder="Manutenção..."
+					onChangeText={(text) => setForm({ ...form, categoria: text })}
+					value={form.categoria}
 				/>
 			</InputsArea>
 

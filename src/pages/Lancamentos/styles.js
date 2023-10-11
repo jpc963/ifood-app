@@ -49,6 +49,7 @@ export const ItemArea = styled.TouchableOpacity`
 export const ItemContent = styled.View`
 	flex-direction: column;
 	align-items: center;
+	gap: 3px;
 `
 
 export const TitleText = styled.Text`
@@ -59,14 +60,4 @@ export const TitleText = styled.Text`
 export const Text = styled.Text`
 	color: rgba(43, 45, 66, 0.75);
 	font-size: 14px;
-`
-
-export const Footer = styled.View`
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	background-color: #2b2d42;
-	width: 100%;
-	height: 60px;
-	padding: 0 14px;
 `

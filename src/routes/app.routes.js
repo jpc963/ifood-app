@@ -4,12 +4,14 @@ import { createDrawerNavigator } from "@react-navigation/drawer"
 import Home from "../pages/Home"
 import CustomDrawer from "../components/CustomDrawer"
 import Rodometro from "../pages/Rodometro"
-import Corridas from "../pages/Corridas"
+import Lancamentos from "../pages/Lancamentos"
 import Faturas from "../pages/Faturas"
 import Estatisticas from "../pages/Estatisticas"
 import Premium from "../pages/Premium"
 import Configuracoes from "../pages/Configuracoes"
-import Add from "../pages/Add"
+
+import Receita from "../pages/NovoLancamento/_components/Receita"
+import Despesa from "../pages/NovoLancamento/_components/Despesa"
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -17,21 +19,19 @@ const Drawer = createDrawerNavigator()
 const routes = {
 	names: [
 		"Rodômetro",
-		"Corridas",
+		"Lançamentos",
 		"Faturas",
 		"Estatísticas",
 		"Premium",
 		"Configurações",
-		"Add",
 	],
 	components: [
 		Rodometro,
-		Corridas,
+		Lancamentos,
 		Faturas,
 		Estatisticas,
 		Premium,
 		Configuracoes,
-		Add,
 	],
 }
 
@@ -70,6 +70,22 @@ function AppRoutes() {
 					component={routes.components[index]}
 				/>
 			))}
+
+			<Stack.Group
+				screenOptions={{
+					presentation: "modal",
+				}}
+			>
+				<Stack.Screen
+					name="Receita"
+					component={Receita}
+				/>
+
+				<Stack.Screen
+					name="Despesa"
+					component={Despesa}
+				/>
+			</Stack.Group>
 		</Stack.Navigator>
 	)
 }

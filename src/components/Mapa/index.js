@@ -19,25 +19,41 @@ export default function Mapa() {
 					longitudeDelta: 0.0134,
 				})
 			})
-			.catch((error) => {
-				console.log(error)
+			.catch((err) => {
+				console.log(err)
 			})
 	}
 
 	useEffect(() => {
-		loadLocation()
+		const initialLocation = async () => {
+			await Location.getLastKnownPositionAsync({
+				accuracy: Location.Accuracy.High,
+			})
+				.then((res) => {
+					setRegion({
+						latitude: res.coords.latitude,
+						longitude: res.coords.longitude,
+						latitudeDelta: 0.0143,
+						longitudeDelta: 0.0134,
+					})
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+		}
+
+		initialLocation()
 	}, [])
 
 	return (
 		<>
 			<MapView
-				style={{ width: "100%", height: "100%", flex: 1 }}
+				style={{ flex: 1 }}
 				loadingEnabled={true}
 				onMapLoaded={() => setRegion(region)}
 				showsUserLocation={true}
 				showsMyLocationButton={false}
 				onRegionChangeComplete={(region) => setRegion(region)}
-				initialRegion={region}
 				region={region}
 				followsUserLocation={true}
 			/>
