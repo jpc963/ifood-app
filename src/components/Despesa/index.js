@@ -34,7 +34,7 @@ export default function Despesa({ navigation, route }) {
 		const diaDeHoje = format(new Date(), "dd/MM/yyyy - HH:mm:ss")
 		await addDespesa(form.valor, form.descricao, form.categoria, diaDeHoje)
 		setForm({})
-		navigation.navigate("Home")
+		navigation.goBack()
 	}
 
 	return (

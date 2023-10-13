@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import MapView from "react-native-maps"
 import * as Location from "expo-location"
-
-import { UserLocationButton, UserLocationIcon } from "./styles"
+import Ionicon from "@expo/vector-icons/Ionicons"
 
 export default function Mapa() {
 	const [region, setRegion] = useState(null)
@@ -58,11 +57,17 @@ export default function Mapa() {
 				followsUserLocation={true}
 			/>
 
-			<UserLocationButton onPress={() => loadLocation()}>
-				<UserLocationIcon
-					source={require("../../assets/images/user-location2x.png")}
-				/>
-			</UserLocationButton>
+			<Ionicon
+				name="navigate-circle"
+				size={56}
+				color="#ef233c"
+				onPress={() => loadLocation()}
+				style={{
+					position: "absolute",
+					bottom: 80,
+					right: 16,
+				}}
+			/>
 		</>
 	)
 }

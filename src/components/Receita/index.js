@@ -33,7 +33,7 @@ export default function Receita({ navigation, route }) {
 		const diaDeHoje = format(new Date(), "dd/MM/yyyy - HH:mm:ss")
 		await addCorrida(form.valor, form.distancia, form.duracao, diaDeHoje)
 		setForm({})
-		navigation.navigate("Home")
+		navigation.goBack()
 	}
 
 	return (

@@ -10,8 +10,8 @@ import Estatisticas from "../pages/Estatisticas"
 import Premium from "../pages/Premium"
 import Configuracoes from "../pages/Configuracoes"
 
-import Receita from "../pages/NovoLancamento/_components/Receita"
-import Despesa from "../pages/NovoLancamento/_components/Despesa"
+import Receita from "../components/Receita"
+import Despesa from "../components/Despesa"
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()

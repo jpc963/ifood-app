@@ -22,42 +22,17 @@ export const HeaderText = styled.Text`
 	font-size: 18px;
 `
 
-export const ListContainer = styled.View`
-	flex: 1;
-	align-items: center;
-	justify-content: center;
-	padding: 10px;
-	flex-direction: column;
-`
-
-export const List = styled.FlatList`
-	flex: 1;
-	width: 100%;
-`
-
-export const ItemArea = styled.TouchableOpacity`
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	height: 80px;
-	padding: 0px 15px;
-	margin-bottom: 10px;
-	border-radius: 5px;
-	background-color: #fff;
-`
-
-export const ItemContent = styled.View`
-	flex-direction: column;
-	align-items: center;
-	gap: 3px;
-`
-
-export const TitleText = styled.Text`
-	color: #2b2d42;
-	font-size: 16px;
-`
-
 export const Text = styled.Text`
 	color: rgba(43, 45, 66, 0.75);
 	font-size: 14px;
+`
+
+export const DropdownArea = styled.View`
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+	height: 40px;
+	background-color: #fff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `

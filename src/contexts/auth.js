@@ -199,6 +199,38 @@ function AuthProvider({ children }) {
 		}
 	}
 
+	const getValorTotalLancamentos = async () => {
+		let valor = 0
+		let valorTotal = 0
+		let valorReceita = 0
+		let valorDespesa = 0
+
+		try {
+			await getDocs(collection(doc(db, "users", user.uid), "corridas")).then(
+				(snapshot) => {
+					snapshot.forEach((doc) => {
+						valor += Number(doc.data().valor)
+						if (doc.data().tipo === "receita") {
+							valorTotal += Number(doc.data().valor)
+							valorReceita += Number(doc.data().valor)
+						} else {
+							valorTotal -= Number(doc.data().valor)
+							valorDespesa += Number(doc.data().valor)
+						}
+					})
+				}
+			)
+
+			return Promise.resolve({
+				valorTotal: Math.round(valorTotal),
+				porcentagemReceita: Math.round((valorReceita / valor) * 100),
+				porcentagemDespesa: Math.round((valorDespesa / valor) * 100),
+			})
+		} catch (error) {
+			console.log("[GET_VALOR_TOTAL_LANCAMENTOS]", error)
+		}
+	}
+
 	return (
 		<AuthContext.Provider
 			value={{
@@ -211,6 +243,7 @@ function AuthProvider({ children }) {
 				updateCorrida,
 				updateDespesa,
 				getLancamentos,
+				getValorTotalLancamentos,
 			}}
 		>
 			{children}

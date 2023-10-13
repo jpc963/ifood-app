@@ -21,7 +21,7 @@ export default function CustomDrawer({ navigation }) {
 	const { user, logout } = useContext(AuthContext)
 	const [profilePicture, setProfilePicture] = useState(null)
 	const routes = {
-		usuario: ["Lançamentos", "Faturas", "Estatísticas"],
+		usuario: ["Lançamentos", "Estatísticas", "Faturas"],
 		app: ["Premium", "Configurações"],
 	}
 
