@@ -1,8 +1,6 @@
-import { useContext } from "react"
-import { useState, useEffect } from "react"
 import { RefreshControl, ActivityIndicator } from "react-native"
+
 import { Feather } from "@expo/vector-icons"
-import { AuthContext } from "../../../../contexts/auth"
 
 import {
 	ListContainer,
@@ -13,20 +11,11 @@ import {
 	Text,
 } from "./styles"
 
-export const ListLancamentos = () => {
-	const { getLancamentos } = useContext(AuthContext)
-	const [lancamentos, setLancamentos] = useState([])
-	const [isLoading, setIsLoading] = useState(true)
-
-	const loadLancamentos = async (dias = dias || null) => {
-		const response = await getLancamentos(dias)
-		setLancamentos(response)
-	}
-
-	useEffect(() => {
-		loadLancamentos(1).then(() => setIsLoading(false))
-	}, [])
-
+export const ListLancamentos = ({
+	lancamentos,
+	loadLancamentos,
+	isLoading,
+}) => {
 	return (
 		<ListContainer>
 			{isLoading ? (

@@ -1,8 +1,10 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../../contexts/auth"
 
 import { Footer } from "../../components/Footer"
 import { Filtro } from "./_components/Filtro"
 import { ListLancamentos } from "./_components/ListLancamentos"
+import { Ionicons } from "@expo/vector-icons"
 
 import {
 	Container,
@@ -14,7 +16,30 @@ import {
 } from "./styles"
 
 export default function Lancamentos({ navigation }) {
+	const { getLancamentos } = useContext(AuthContext)
+	const [lancamentos, setLancamentos] = useState([])
+	const [isLoading, setIsLoading] = useState(true)
 	const [showDropdown, setShowDropdown] = useState(false)
+	const [ascendente, setAscendente] = useState(true)
+
+	const loadLancamentos = async (dias = dias || null) => {
+		const response = await getLancamentos(dias)
+		setLancamentos(response)
+	}
+
+	useEffect(() => {
+		loadLancamentos(1).then(() => setIsLoading(false))
+	}, [])
+
+	const orderByValor = () => {
+		if (ascendente) {
+			setLancamentos(lancamentos.sort((a, b) => a.valor - b.valor))
+		} else {
+			setLancamentos(lancamentos.sort((a, b) => b.valor - a.valor))
+		}
+
+		setAscendente(!ascendente)
+	}
 
 	return (
 		<Container>
@@ -39,21 +64,24 @@ export default function Lancamentos({ navigation }) {
 
 			{showDropdown && (
 				<DropdownArea>
-					<Button>
+					<Button
+						onPress={() => orderByValor()}
+						style={{ flexDirection: "row", gap: 3, alignItems: "center" }}
+					>
 						<Text>Valor</Text>
-					</Button>
-
-					<Button>
-						<Text>Distância</Text>
-					</Button>
-
-					<Button>
-						<Text>Data</Text>
+						<Ionicons
+							name={ascendente ? "chevron-up-outline" : "chevron-down-outline"}
+							color={"rgba(43, 45, 66, 0.75)"}
+						/>
 					</Button>
 				</DropdownArea>
 			)}
 
-			<ListLancamentos />
+			<ListLancamentos
+				lancamentos={lancamentos}
+				loadLancamentos={loadLancamentos}
+				isLoading={isLoading}
+			/>
 
 			<Footer
 				navigation={navigation}
