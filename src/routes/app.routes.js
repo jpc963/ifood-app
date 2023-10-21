@@ -12,6 +12,7 @@ import Configuracoes from "../pages/Configuracoes"
 
 import Receita from "../components/Receita"
 import Despesa from "../components/Despesa"
+import Perfil from "../pages/Perfil"
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -24,15 +25,9 @@ const routes = {
 		"Estatísticas",
 		"Premium",
 		"Configurações",
+		"Perfil",
 	],
-	components: [
-		Rodometro,
-		Lancamentos,
-		Faturas,
-		Estatisticas,
-		Premium,
-		Configuracoes,
-	],
+	components: [Rodometro, Lancamentos, Faturas, Estatisticas, Premium, Configuracoes, Perfil],
 }
 
 function MyDrawer() {

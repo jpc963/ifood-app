@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../contexts/auth"
 
+import Ionicon from "@expo/vector-icons/Ionicons"
+
 import { Footer } from "../../components/Footer"
 import { Filtro } from "./_components/Filtro"
 import { ListLancamentos } from "./_components/ListLancamentos"
-import { Ionicons } from "@expo/vector-icons"
 
 import {
 	Container,
@@ -69,7 +70,7 @@ export default function Lancamentos({ navigation }) {
 						style={{ flexDirection: "row", gap: 3, alignItems: "center" }}
 					>
 						<Text>Valor</Text>
-						<Ionicons
+						<Ionicon
 							name={ascendente ? "chevron-up-outline" : "chevron-down-outline"}
 							color={"rgba(43, 45, 66, 0.75)"}
 						/>

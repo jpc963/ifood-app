@@ -12,23 +12,6 @@ export const HeaderArea = styled.View`
 	margin-top: 27px;
 `
 
-export const UploadButton = styled.TouchableOpacity`
-	background-color: #fff;
-	width: 110px;
-	height: 110px;
-	border-radius: 55px;
-	align-items: center;
-	justify-content: center;
-`
-
-export const Logo = styled.Image.attrs({
-	resizeMode: "contain",
-})`
-	width: 110px;
-	height: 110px;
-	border-radius: 55px;
-`
-
 export const HeaderText = styled.Text`
 	color: #2b2d42;
 	text-align: center;

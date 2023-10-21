@@ -3,11 +3,7 @@ import { db, auth } from "../../firebaseConfig"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { format, subDays } from "date-fns"
 
-import {
-	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
-	signOut,
-} from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import {
 	doc,
 	setDoc,
@@ -19,11 +15,15 @@ import {
 	orderBy,
 	where,
 } from "firebase/firestore"
+import * as ImagePicker from "expo-image-picker"
+import { storage } from "../../firebaseConfig"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 export const AuthContext = createContext()
 
 function AuthProvider({ children }) {
 	const [user, setUser] = useState(null)
+	const [profilePicture, setProfilePicture] = useState(null)
 
 	useEffect(() => {
 		const loadStorage = async () => {
@@ -39,20 +39,16 @@ function AuthProvider({ children }) {
 
 	const register = async (nome, usuario, email, password) => {
 		try {
-			await createUserWithEmailAndPassword(auth, email, password).then(
-				async (response) => {
-					setUser(response.user)
-					AsyncStorage.setItem("user", JSON.stringify(response.user)).then(
-						async () => {
-							await setDoc(doc(db, "users", response.user.uid), {
-								nome: nome,
-								usuario: usuario,
-								email: email,
-							})
-						}
-					)
-				}
-			)
+			await createUserWithEmailAndPassword(auth, email, password).then(async (response) => {
+				setUser(response.user)
+				AsyncStorage.setItem("user", JSON.stringify(response.user)).then(async () => {
+					await setDoc(doc(db, "users", response.user.uid), {
+						nome: nome,
+						usuario: usuario,
+						email: email,
+					})
+				})
+			})
 		} catch (error) {
 			console.log("[REGISTER]", error)
 		}
@@ -62,29 +58,25 @@ function AuthProvider({ children }) {
 
 	const login = async (email, password) => {
 		try {
-			await signInWithEmailAndPassword(auth, email, password).then(
-				async (userCredential) => {
-					await getDoc(doc(db, "users", userCredential.user.uid)).then(
-						(snapshot) => {
-							setUser({
-								uid: userCredential.user.uid,
-								nome: snapshot.data().nome,
-								usuario: snapshot.data().usuario,
-								email: snapshot.data().email,
-							})
-							AsyncStorage.setItem(
-								"user",
-								JSON.stringify({
-									uid: userCredential.user.uid,
-									nome: snapshot.data().nome,
-									usuario: snapshot.data().usuario,
-									email: snapshot.data().email,
-								})
-							)
-						}
+			await signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
+				await getDoc(doc(db, "users", userCredential.user.uid)).then((snapshot) => {
+					setUser({
+						uid: userCredential.user.uid,
+						nome: snapshot.data().nome,
+						usuario: snapshot.data().usuario,
+						email: snapshot.data().email,
+					})
+					AsyncStorage.setItem(
+						"user",
+						JSON.stringify({
+							uid: userCredential.user.uid,
+							nome: snapshot.data().nome,
+							usuario: snapshot.data().usuario,
+							email: snapshot.data().email,
+						})
 					)
-				}
-			)
+				})
+			})
 		} catch (error) {
 			console.log("[LOGIN]", error)
 		}
@@ -206,20 +198,18 @@ function AuthProvider({ children }) {
 		let valorDespesa = 0
 
 		try {
-			await getDocs(collection(doc(db, "users", user.uid), "corridas")).then(
-				(snapshot) => {
-					snapshot.forEach((doc) => {
-						valor += Number(doc.data().valor)
-						if (doc.data().tipo === "receita") {
-							valorTotal += Number(doc.data().valor)
-							valorReceita += Number(doc.data().valor)
-						} else {
-							valorTotal -= Number(doc.data().valor)
-							valorDespesa += Number(doc.data().valor)
-						}
-					})
-				}
-			)
+			await getDocs(collection(doc(db, "users", user.uid), "corridas")).then((snapshot) => {
+				snapshot.forEach((doc) => {
+					valor += Number(doc.data().valor)
+					if (doc.data().tipo === "receita") {
+						valorTotal += Number(doc.data().valor)
+						valorReceita += Number(doc.data().valor)
+					} else {
+						valorTotal -= Number(doc.data().valor)
+						valorDespesa += Number(doc.data().valor)
+					}
+				})
+			})
 
 			return Promise.resolve({
 				valorTotal: Math.round(valorTotal),
@@ -229,6 +219,25 @@ function AuthProvider({ children }) {
 		} catch (error) {
 			console.log("[GET_VALOR_TOTAL_LANCAMENTOS]", error)
 		}
+	}
+
+	const pickImage = async () => {
+		await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [3, 3],
+			quality: 0.5,
+		}).then((response) => {
+			if (!response.canceled) {
+				setProfilePicture(response.assets[0].uri)
+				uploadImageFirebase(response)
+			}
+		})
+	}
+
+	const uploadImageFirebase = async (response) => {
+		const fileSource = await fetch(response.assets[0].uri)
+		return await uploadBytes(ref(storage, `users/${user.uid}`), await fileSource.blob())
 	}
 
 	return (
@@ -244,6 +253,9 @@ function AuthProvider({ children }) {
 				updateDespesa,
 				getLancamentos,
 				getValorTotalLancamentos,
+				pickImage,
+				profilePicture,
+				setProfilePicture,
 			}}
 		>
 			{children}
